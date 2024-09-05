@@ -65,7 +65,7 @@ resource "azurerm_public_ip" "pip" {
 # Application Gateway with all optional blocks
 #----------------------------------------------
 resource "azurerm_application_gateway" "main" {
-  name                = lower("appgw-${var.app_gateway_name}")
+  name                = lower("${var.app_gateway_name}")
   resource_group_name = local.resource_group_name
   location            = local.location
   enable_http2        = var.enable_http2
