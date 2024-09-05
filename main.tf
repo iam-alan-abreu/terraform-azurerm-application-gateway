@@ -53,9 +53,9 @@ data "azurerm_storage_account" "storeacc" {
 #-----------------------------------
 resource "azurerm_public_ip" "pip" {
   name                = lower("${var.app_gateway_name}-gw-pip")
-              = local.
+  location            = local.location
   resource_group_name = local.resource_group_name
-  al_method   = var.sku.tier == "Standard" ? "Dynamic" : "Static"
+  allocation_method   = var.sku.tier == "Standard" ? "Dynamic" : "Static"
   sku                 = var.sku.tier == "Standard" ? "Basic" : "Standard"
   domain_name_label   = var.domain_name_label
   tags                = merge({ "ResourceName" = lower("${var.app_gateway_name}-gw-pip") }, var.tags, )
@@ -67,7 +67,7 @@ resource "azurerm_public_ip" "pip" {
 resource "azurerm_application_gateway" "main" {
   name                = lower("appgw-${var.app_gateway_name}")
   resource_group_name = local.resource_group_name
-              = local.
+  location            = local.location
   enable_http2        = var.enable_http2
   zones               = var.zones
   firewall_policy_id  = var.firewall_policy_id != null ? var.firewall_policy_id : null
