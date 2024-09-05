@@ -106,6 +106,7 @@ output "ssl_certificate_id" {
 output "ssl_certificate_public_cert_data" {
   description = "The Public Certificate Data associated with the SSL Certificate"
   value       = azurerm_application_gateway.main.ssl_certificate.*.public_cert_data
+  sensitive   = true
 }
 
 output "url_path_map_id" {
