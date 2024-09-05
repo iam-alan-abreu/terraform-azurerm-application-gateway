@@ -147,6 +147,8 @@ variable "request_routing_rules" {
     redirect_configuration_name = optional(string)
     rewrite_rule_set_name       = optional(string)
     url_path_map_name           = optional(string)
+    priority                    = optional(string)
+
   }))
   default = []
 }
