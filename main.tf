@@ -2,9 +2,9 @@
 # Local declarations
 #---------------------------
 locals {
-  frontend_port_name             = "appgw-${var.app_gateway_name}-${local.location}-feport"
-  frontend_ip_configuration_name = "appgw-${var.app_gateway_name}-${local.location}-feip"
-  gateway_ip_configuration_name  = "appgw-${var.app_gateway_name}-${local.location}-gwipc"
+  frontend_port_name             = "${var.app_gateway_name}-feport"
+  frontend_ip_configuration_name = "${var.app_gateway_name}-feip"
+  gateway_ip_configuration_name  = "${var.app_gateway_name}-gwipc"
 
   resource_group_name = element(coalescelist(data.azurerm_resource_group.rgrp.*.name, azurerm_resource_group.rg.*.name, [""]), 0)
   location            = element(coalescelist(data.azurerm_resource_group.rgrp.*.location, azurerm_resource_group.rg.*.location, [""]), 0)
@@ -52,26 +52,26 @@ data "azurerm_storage_account" "storeacc" {
 # Public IP for application gateway
 #-----------------------------------
 resource "azurerm_public_ip" "pip" {
-  name                = lower("${var.app_gateway_name}-${local.location}-gw-pip")
-  location            = local.location
+  name                = lower("${var.app_gateway_name}-gw-pip")
+              = local.
   resource_group_name = local.resource_group_name
-  allocation_method   = var.sku.tier == "Standard" ? "Dynamic" : "Static"
+  al_method   = var.sku.tier == "Standard" ? "Dynamic" : "Static"
   sku                 = var.sku.tier == "Standard" ? "Basic" : "Standard"
   domain_name_label   = var.domain_name_label
-  tags                = merge({ "ResourceName" = lower("${var.app_gateway_name}-${local.location}-gw-pip") }, var.tags, )
+  tags                = merge({ "ResourceName" = lower("${var.app_gateway_name}-gw-pip") }, var.tags, )
 }
 
 #----------------------------------------------
 # Application Gateway with all optional blocks
 #----------------------------------------------
 resource "azurerm_application_gateway" "main" {
-  name                = lower("appgw-${var.app_gateway_name}-${local.location}")
+  name                = lower("appgw-${var.app_gateway_name}")
   resource_group_name = local.resource_group_name
-  location            = local.location
+              = local.
   enable_http2        = var.enable_http2
   zones               = var.zones
   firewall_policy_id  = var.firewall_policy_id != null ? var.firewall_policy_id : null
-  tags                = merge({ "ResourceName" = lower("appgw-${var.app_gateway_name}-${local.location}") }, var.tags, )
+  tags                = merge({ "ResourceName" = lower("appgw-${var.app_gateway_name}") }, var.tags, )
 
   sku {
     name     = var.sku.name
