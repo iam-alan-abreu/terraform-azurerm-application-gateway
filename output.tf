@@ -101,6 +101,7 @@ output "request_routing_rule_url_path_map_id" {
 output "ssl_certificate_id" {
   description = "The ID of the SSL Certificate"
   value       = azurerm_application_gateway.main.ssl_certificate.*.id
+  sensitive   = true
 }
 
 output "ssl_certificate_public_cert_data" {
