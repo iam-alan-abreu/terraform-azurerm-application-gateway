@@ -4,6 +4,7 @@
 locals {
   frontend_port_name             = "${var.app_gateway_name}-feport"
   frontend_ip_configuration_name = "${var.app_gateway_name}-feip"
+  private_frontend_ip_configuration_name = "${var.app_gateway_name}-pvt-feip"
   gateway_ip_configuration_name  = "${var.app_gateway_name}-gwipc"
 
   resource_group_name = element(coalescelist(data.azurerm_resource_group.rgrp.*.name, azurerm_resource_group.rg.*.name, [""]), 0)
@@ -92,13 +93,28 @@ resource "azurerm_application_gateway" "main" {
     subnet_id = data.azurerm_subnet.snet.id
   }
 
+  dynamic "frontend_ip_configuration" {
+    for_each = var.private_ip_address != null ? [1] : []
+    content {
+      name                          = local.private_frontend_ip_configuration_name
+      private_ip_address            = var.private_ip_address != null ? var.private_ip_address : null
+      private_ip_address_allocation = var.private_ip_address != null ? "Static" : null
+      subnet_id                     = var.private_ip_address != null ? data.azurerm_subnet.snet.id : null
+    }
+  }
+
   frontend_ip_configuration {
     name                          = local.frontend_ip_configuration_name
     public_ip_address_id          = azurerm_public_ip.pip.id
-    private_ip_address            = var.private_ip_address != null ? var.private_ip_address : null
-    private_ip_address_allocation = var.private_ip_address != null ? "Static" : null
-    subnet_id                     = var.private_ip_address != null ? data.azurerm_subnet.snet.id : null
   }
+
+  #frontend_ip_configuration {
+  #  name                          = local.frontend_ip_configuration_name
+  #  public_ip_address_id          = azurerm_public_ip.pip.id
+  #  private_ip_address            = var.private_ip_address != null ? var.private_ip_address : null
+  #  private_ip_address_allocation = var.private_ip_address != null ? "Static" : null
+  #  subnet_id                     = var.private_ip_address != null ? data.azurerm_subnet.snet.id : null
+  #}
 
   frontend_port {
     name = "${local.frontend_port_name}-80"
