@@ -124,6 +124,7 @@ variable "http_listeners" {
   description = "List of HTTP/HTTPS listeners. SSL Certificate name is required"
   type = list(object({
     name                 = string
+    private              = optional(bool, false)
     host_name            = optional(string)
     host_names           = optional(list(string))
     require_sni          = optional(bool)
