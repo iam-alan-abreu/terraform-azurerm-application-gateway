@@ -181,7 +181,7 @@ resource "azurerm_application_gateway" "main" {
     for_each = var.http_listeners
     content {
       name                           = http_listener.value.name
-      frontend_ip_configuration_name = local.frontend_ip_configuration_name
+      frontend_ip_configuration_name = http_listener.value.private ? local.private_frontend_ip_configuration_name : local.frontend_ip_configuration_name 
       frontend_port_name             = http_listener.value.ssl_certificate_name == null ? "${local.frontend_port_name}-80" : "${local.frontend_port_name}-443"
       host_name                      = lookup(http_listener.value, "host_name", null)
       host_names                     = lookup(http_listener.value, "host_names", null)
