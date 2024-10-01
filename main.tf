@@ -132,7 +132,7 @@ resource "azurerm_application_gateway" "main" {
       cookie_based_affinity               = lookup(backend_http_settings.value, "cookie_based_affinity", "Disabled")
       affinity_cookie_name                = lookup(backend_http_settings.value, "affinity_cookie_name", null)
       path                                = lookup(backend_http_settings.value, "path", "/")
-      port                                = backend_http_settings.value.enable_https ? 443 : 80
+      port                                = lookup(backend_http_settings.value, "port", 80)
       probe_name                          = lookup(backend_http_settings.value, "probe_name", null)
       protocol                            = backend_http_settings.value.enable_https ? "Https" : "Http"
       request_timeout                     = lookup(backend_http_settings.value, "request_timeout", 30)
