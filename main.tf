@@ -451,7 +451,7 @@ resource "azurerm_application_gateway" "main" {
 #---------------------------------------------------------------
 # azurerm monitoring diagnostics - PIP, and Application Gateway
 #---------------------------------------------------------------
-resource "azurerm_monitor_diagnostic_setting" "pip-diag" {
+# resource "azurerm_monitor_diagnostic_setting" "pip-diag" {
 #   count                      = var.log_analytics_workspace_name != null || var.storage_account_name != null ? 1 : 0
 #   name                       = lower("pip-${var.app_gateway_name}-diag")
 #   target_resource_id         = azurerm_public_ip.pip.id
