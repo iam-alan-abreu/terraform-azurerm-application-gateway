@@ -53,6 +53,12 @@ variable "enable_http2" {
   default     = false
 }
 
+variable "has_public_ip" {
+  description = "Is public ip?"
+  default     = false
+}
+
+
 variable "zones" {
   description = "A collection of availability zones to spread the Application Gateway over."
   type        = list(string)
