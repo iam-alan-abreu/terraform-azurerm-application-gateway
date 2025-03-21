@@ -105,8 +105,8 @@ resource "azurerm_application_gateway" "main" {
   }
 
   frontend_ip_configuration {
-    name                          = var.has_public_ip != null ? local.frontend_ip_configuration_name: null
-    public_ip_address_id          = var.has_public_ip != null ? azurerm_public_ip.pip.0.id : null
+    name                          = var.has_public_ip ? local.frontend_ip_configuration_name: null
+    public_ip_address_id          = var.has_public_ip ? azurerm_public_ip.pip.0.id : null
   }
 
   #frontend_ip_configuration {
