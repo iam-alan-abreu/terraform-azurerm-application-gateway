@@ -104,10 +104,18 @@ resource "azurerm_application_gateway" "main" {
     }
   }
 
-  frontend_ip_configuration {
-    name                          = local.frontend_ip_configuration_name
-    public_ip_address_id          = var.has_public_ip ? azurerm_public_ip.pip.0.id : null
+  dynamic "frontend_ip_configuration" {
+    for_each = var.has_public_ip ? [1] : []
+    content {
+      name                          = local.frontend_ip_configuration_name
+      public_ip_address_id          = azurerm_public_ip.pip.0.id
+    }
   }
+
+ # frontend_ip_configuration {
+ #   name                          = local.frontend_ip_configuration_name
+ #   public_ip_address_id          = var.has_public_ip ? azurerm_public_ip.pip.0.id : null
+ # }
 
   #frontend_ip_configuration {
   #  name                          = local.frontend_ip_configuration_name
