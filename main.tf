@@ -53,6 +53,7 @@ data "azurerm_storage_account" "storeacc" {
 # Public IP for application gateway
 #-----------------------------------
 resource "azurerm_public_ip" "pip" {
+  count = var.has_public_ip ? 1 : 0
   name                = lower("${var.app_gateway_name}-gw-pip")
   location            = local.location
   resource_group_name = local.resource_group_name
@@ -104,13 +105,13 @@ resource "azurerm_application_gateway" "main" {
   }
 
   frontend_ip_configuration {
-    name                          = local.frontend_ip_configuration_name
-    public_ip_address_id          = azurerm_public_ip.pip.id
+    name                          = var.has_public_ip != null ? local.frontend_ip_configuration_name: null
+    public_ip_address_id          = var.has_public_ip != null ? azurerm_public_ip.pip.0.id : null
   }
 
   #frontend_ip_configuration {
   #  name                          = local.frontend_ip_configuration_name
-  #  public_ip_address_id          = azurerm_public_ip.pip.id
+  #  public_ip_address_id          = azurerm_public_ip.pip.0.id
   #  private_ip_address            = var.private_ip_address != null ? var.private_ip_address : null
   #  private_ip_address_allocation = var.private_ip_address != null ? "Static" : null
   #  subnet_id                     = var.private_ip_address != null ? data.azurerm_subnet.snet.id : null
@@ -454,7 +455,7 @@ resource "azurerm_application_gateway" "main" {
 # resource "azurerm_monitor_diagnostic_setting" "pip-diag" {
 #   count                      = var.log_analytics_workspace_name != null || var.storage_account_name != null ? 1 : 0
 #   name                       = lower("pip-${var.app_gateway_name}-diag")
-#   target_resource_id         = azurerm_public_ip.pip.id
+#   target_resource_id         = azurerm_public_ip.pip.0.id
 #   storage_account_id         = var.storage_account_name != null ? data.azurerm_storage_account.storeacc.0.id : null
 #   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.logws.0.id
 
